@@ -1,6 +1,7 @@
 package ru.netology.testing.uiautomator
 
 import android.content.Context
+import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -110,6 +111,32 @@ class ChangeTextTest {
         assertEquals(result, textToSet)
     }
 
+    @Test
+    fun testEmptyString() {
+        val packageName = MODEL_PACKAGE
+        waitForPackage(packageName)
+
+        val initialText = device.findObject(By.res(packageName, "textToBeChanged")).text
+        device.findObject(By.res(packageName, "userInput")).text = "   "
+        device.findObject(By.res(packageName, "buttonChange")).click()
+
+        val newText = device.findObject(By.res(packageName, "textToBeChanged")).text
+        assertEquals(newText, initialText)
+    }
+
+    @Test
+    fun testNewActivity() {
+        val packageName = MODEL_PACKAGE
+        waitForPackage(packageName)
+
+        device.findObject(By.res(packageName, "userInput")).text = textToSet
+        device.findObject(By.res(packageName, "buttonChange")).click()
+        device.findObject(By.res(packageName, "buttonActivity")).click()
+        waitForPackage(packageName)
+
+        val newText = device.findObject(By.res(packageName, "text")).text
+        assertEquals(newText, textToSet)
+    }
 }
 
 
